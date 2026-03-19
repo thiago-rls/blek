@@ -28,8 +28,8 @@ func main() {
 	case "clean":
 		handleClean()
 	case "new":
-	case "version":
 		handleNew(os.Args[2:])
+	case "version":
 		fmt.Printf("blek v%s\n", Version)
 	case "help":
 		printHelp()

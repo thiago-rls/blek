@@ -8,7 +8,7 @@ import (
 	"path/filepath"
 )
 
-//go:embed skeleton/*
+//go:embed skeleton
 var skeletonFS embed.FS
 
 func handleInit(args []string) {
