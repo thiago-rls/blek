@@ -19,6 +19,12 @@ func handleInit(args []string) {
 
 	fmt.Printf("Initializing new blek project in %s...\n", targetDir)
 
+	// Ensure target directory exists
+	if err := os.MkdirAll(targetDir, 0755); err != nil {
+		fmt.Printf("Error creating target directory: %v\n", err)
+		os.Exit(1)
+	}
+
 	// We walk through the 'skeleton' directory in the embedded FS
 	err := fs.WalkDir(skeletonFS, "skeleton", func(path string, d fs.DirEntry, err error) error {
 		if err != nil {
