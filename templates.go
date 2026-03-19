@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 type Section struct {
@@ -15,8 +16,7 @@ type Section struct {
 
 type TemplateData struct {
 	Title    string
-	DateStr  string
-	Tags     []string
+	Date     time.Time
 	HTMLBody template.HTML
 	URL      string
 	Config   *Config

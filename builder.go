@@ -69,7 +69,7 @@ func Build(contentDir, outputDir, templatesDir string, cfg *Config) error {
 	}
 
 	sort.Slice(posts, func(i, j int) bool {
-		return posts[i].DateStr > posts[j].DateStr
+		return posts[i].Date.After(posts[j].Date)
 	})
 
 	// Render the main index page (/)
@@ -118,8 +118,7 @@ func buildPosts(sectionPath, outputDir string, tmpl *Templates, cfg *Config, sec
 
 		data := TemplateData{
 			Title:    page.Title,
-			DateStr:  page.Date.Format("2006-01-02"),
-			Tags:     page.Tags,
+			Date:     page.Date,
 			HTMLBody: template.HTML(htmlBody),
 			URL:      page.URL,
 			Config:   cfg,
@@ -166,8 +165,7 @@ func buildPages(sectionPath, section, outputDir string, tmpl *Templates, cfg *Co
 
 		data := TemplateData{
 			Title:    page.Title,
-			DateStr:  page.Date.Format("2006-01-02"),
-			Tags:     page.Tags,
+			Date:     page.Date,
 			HTMLBody: template.HTML(htmlBody),
 			URL:      page.URL,
 			Config:   cfg,

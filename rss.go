@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 type RSS struct {
@@ -34,7 +35,7 @@ func renderRSS(outputDir string, posts []TemplateData, cfg *Config) error {
 			Title:       p.Title,
 			Link:        cfg.BaseURL + p.URL,
 			Description: p.Title,
-			PubDate:     p.DateStr,
+			PubDate:     p.Date.Format(time.RFC1123Z),
 		})
 	}
 

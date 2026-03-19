@@ -14,7 +14,6 @@ import (
 type FrontMatter struct {
 	Title string   `yaml:"title"`
 	Date  string   `yaml:"date"`
-	Tags  []string `yaml:"tags"`
 }
 
 type Page struct {

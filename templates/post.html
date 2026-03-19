@@ -3,12 +3,7 @@
 {{define "content"}}
 <article>
     <h1>{{.Title}}</h1>
-    <time datetime="{{.DateStr}}">{{.DateStr}}</time>
-    {{if .Tags}}
-    <ul>
-        {{range .Tags}}<li>{{.}}</li>{{end}}
-    </ul>
-    {{end}}
+    <time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>
     <div>{{.HTMLBody}}</div>
 </article>
 {{end}}
