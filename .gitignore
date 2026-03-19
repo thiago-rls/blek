@@ -1,0 +1,9 @@
+# Blek generated output
+output/
+
+# Binaries
+blek
+/go/bin/
+
+# OS files
+.DS_Store
