@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>Site title</title>
-    <link>https://blog.com</link>
-    <description>Site description</description>
+    <title>Lorem</title>
+    <link>https://blek-blog.com</link>
+    <description>Lorem ipsum dolor sit amet consectetur adipiscing elit.</description>
     <item>
-      <title>first-post</title>
-      <link>https://blog.com/posts/first-post/</link>
-      <description>first-post</description>
+      <title>First Post</title>
+      <link>https://blek-blog.com/posts/first-post/</link>
+      <description>First Post</description>
       <pubDate>Wed, 18 Mar 2026 00:00:00 +0000</pubDate>
     </item>
   </channel>

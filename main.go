@@ -88,17 +88,20 @@ func handleNew(args []string) {
 	date := time.Now().Format("2006-01-02")
 
 	var targetDir string
+	var fileName string
 	switch kind {
 	case "post":
 		targetDir = "content/posts"
+		fileName = slug + ".md"
 	case "page":
-		targetDir = "content"
+		targetDir = filepath.Join("content", slug)
+		fileName = "index.md"
 	default:
 		fmt.Printf("Unknown content type: %s (expected 'post' or 'page')\n", kind)
 		os.Exit(1)
 	}
 
-	filePath := filepath.Join(targetDir, slug+".md")
+	filePath := filepath.Join(targetDir, fileName)
 
 	if _, err := os.Stat(filePath); err == nil {
 		fmt.Printf("Error: file already exists: %s\n", filePath)
@@ -138,6 +141,7 @@ func printHelp() {
 	fmt.Println("  version    Show version information")
 	fmt.Println("  help       Show this help message")
 	fmt.Println("\nExample:")
-	fmt.Println("  blek new post \"Hello World\"")
+	fmt.Println("  blek new post \"Awesome Post\"")
+	fmt.Println("  blek new page \"About\"")
 	fmt.Println("  blek serve")
 }
