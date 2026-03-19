@@ -8,30 +8,33 @@ import (
 	"path/filepath"
 )
 
-// TemplateData is passed to post.html and page.html.
+type Section struct {
+	Name  string
+	Title string
+}
+
 type TemplateData struct {
 	Title    string
 	DateStr  string
 	Tags     []string
-	HTMLBody template.HTML // Tells Go this string is safe, do not escape it
+	HTMLBody template.HTML
 	URL      string
 	Config   *Config
+	Sections []Section
 }
 
-// IndexData is passed to index.html.
 type IndexData struct {
-	Posts  []TemplateData
-	Config *Config
+	Posts    []TemplateData
+	Config   *Config
+	Sections []Section
 }
 
-// Templates holds all loaded templates.
 type Templates struct {
 	post  *template.Template
 	page  *template.Template
 	index *template.Template
 }
 
-// LoadTemplates parses all templates from the templates/ directory.
 func LoadTemplates(dir string) (*Templates, error) {
 	base := filepath.Join(dir, "base.html")
 
@@ -53,22 +56,18 @@ func LoadTemplates(dir string) (*Templates, error) {
 	return &Templates{post: post, page: page, index: index}, nil
 }
 
-// RenderPost writes a post page to w.
 func (t *Templates) RenderPost(w io.Writer, data TemplateData) error {
 	return t.post.ExecuteTemplate(w, "base.html", data)
 }
 
-// RenderPage writes a standalone page to w.
 func (t *Templates) RenderPage(w io.Writer, data TemplateData) error {
 	return t.page.ExecuteTemplate(w, "base.html", data)
 }
 
-// RenderIndex writes the index page to w.
 func (t *Templates) RenderIndex(w io.Writer, data IndexData) error {
 	return t.index.ExecuteTemplate(w, "base.html", data)
 }
 
-// writeFile creates the file at path and writes content to it.
 func writeFile(path string, render func(io.Writer) error) error {
 	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
 		return fmt.Errorf("creating directories for %s: %w", path, err)

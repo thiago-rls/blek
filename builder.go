@@ -10,9 +10,7 @@ import (
 	"strings"
 )
 
-// Build is the main entry point for the site generation.
 func Build(contentDir, outputDir, templatesDir string, cfg *Config) error {
-	// Clean output directory before building
 	if err := os.RemoveAll(outputDir); err != nil {
 		return fmt.Errorf("cleaning output dir: %w", err)
 	}
@@ -29,11 +27,23 @@ func Build(contentDir, outputDir, templatesDir string, cfg *Config) error {
 		return fmt.Errorf("loading templates: %w", err)
 	}
 
-	// Walk content directory, one subfolder = one section
 	entries, err := os.ReadDir(contentDir)
 	if err != nil {
 		return fmt.Errorf("reading content dir: %w", err)
 	}
+
+	var sections []Section
+	for _, entry := range entries {
+		if entry.IsDir() {
+			name := entry.Name()
+			title := strings.ToUpper(name[:1]) + name[1:]
+			sections = append(sections, Section{Name: name, Title: title})
+		}
+	}
+
+	sort.Slice(sections, func(i, j int) bool {
+		return sections[i].Title < sections[j].Title
+	})
 
 	var posts []TemplateData
 
@@ -42,33 +52,35 @@ func Build(contentDir, outputDir, templatesDir string, cfg *Config) error {
 			continue
 		}
 
-		section := entry.Name() // "posts", "about", "projects", etc.
+		section := entry.Name()
 		sectionPath := filepath.Join(contentDir, section)
 
 		if section == "posts" {
-			collected, err := buildPosts(sectionPath, outputDir, tmpl, cfg)
+			collected, err := buildPosts(sectionPath, outputDir, tmpl, cfg, sections)
 			if err != nil {
 				return fmt.Errorf("building posts: %w", err)
 			}
 			posts = append(posts, collected...)
 		} else {
-			if err := buildPages(sectionPath, section, outputDir, tmpl, cfg); err != nil {
+			if err := buildPages(sectionPath, section, outputDir, tmpl, cfg, sections); err != nil {
 				return fmt.Errorf("building section %s: %w", section, err)
 			}
 		}
 	}
 
-	// Sort posts by date, newest first
 	sort.Slice(posts, func(i, j int) bool {
 		return posts[i].DateStr > posts[j].DateStr
 	})
 
-	// Render index page
-	if err := renderIndex(outputDir, tmpl, posts, cfg); err != nil {
+	if err := renderIndex(outputDir, tmpl, posts, cfg, sections); err != nil {
 		return fmt.Errorf("building index: %w", err)
 	}
 
-	// Render RSS feed
+	postsIndexDir := filepath.Join(outputDir, "posts")
+	if err := renderIndex(postsIndexDir, tmpl, posts, cfg, sections); err != nil {
+		return fmt.Errorf("building posts index: %w", err)
+	}
+
 	if err := renderRSS(outputDir, posts, cfg); err != nil {
 		return fmt.Errorf("building rss: %w", err)
 	}
@@ -76,7 +88,7 @@ func Build(contentDir, outputDir, templatesDir string, cfg *Config) error {
 	return nil
 }
 
-func buildPosts(sectionPath, outputDir string, tmpl *Templates, cfg *Config) ([]TemplateData, error) {
+func buildPosts(sectionPath, outputDir string, tmpl *Templates, cfg *Config, sections []Section) ([]TemplateData, error) {
 	files, err := os.ReadDir(sectionPath)
 	if err != nil {
 		return nil, fmt.Errorf("reading posts dir: %w", err)
@@ -109,6 +121,7 @@ func buildPosts(sectionPath, outputDir string, tmpl *Templates, cfg *Config) ([]
 			HTMLBody: template.HTML(htmlBody),
 			URL:      page.URL,
 			Config:   cfg,
+			Sections: sections,
 		}
 
 		outPath := filepath.Join(outputDir, "posts", slug, "index.html")
@@ -125,7 +138,7 @@ func buildPosts(sectionPath, outputDir string, tmpl *Templates, cfg *Config) ([]
 	return posts, nil
 }
 
-func buildPages(sectionPath, section, outputDir string, tmpl *Templates, cfg *Config) error {
+func buildPages(sectionPath, section, outputDir string, tmpl *Templates, cfg *Config, sections []Section) error {
 	files, err := os.ReadDir(sectionPath)
 	if err != nil {
 		return fmt.Errorf("reading section dir: %w", err)
@@ -156,10 +169,9 @@ func buildPages(sectionPath, section, outputDir string, tmpl *Templates, cfg *Co
 			HTMLBody: template.HTML(htmlBody),
 			URL:      page.URL,
 			Config:   cfg,
+			Sections: sections,
 		}
 
-		// index.md inside a section folder -> output/section/index.html
-		// any other file -> output/section/slug/index.html
 		var outPath string
 		if slug == "index" {
 			outPath = filepath.Join(outputDir, section, "index.html")
@@ -179,8 +191,8 @@ func buildPages(sectionPath, section, outputDir string, tmpl *Templates, cfg *Co
 	return nil
 }
 
-func renderIndex(outputDir string, tmpl *Templates, posts []TemplateData, cfg *Config) error {
-	data := IndexData{Posts: posts, Config: cfg}
+func renderIndex(outputDir string, tmpl *Templates, posts []TemplateData, cfg *Config, sections []Section) error {
+	data := IndexData{Posts: posts, Config: cfg, Sections: sections}
 	outPath := filepath.Join(outputDir, "index.html")
 	return writeFile(outPath, func(w io.Writer) error {
 		return tmpl.RenderIndex(w, data)

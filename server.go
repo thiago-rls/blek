@@ -88,7 +88,8 @@ func injectReload(next http.Handler) http.Handler {
 			return
 		}
 
-		rec := &responseRecorder{header: make(http.Header)}
+		// Use 200 as default status to avoid "WriteHeader code 0" panic
+		rec := &responseRecorder{header: make(http.Header), status: 200}
 		next.ServeHTTP(rec, r)
 
 		body := append(rec.body, []byte(reloadScript)...)
