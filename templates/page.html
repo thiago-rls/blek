@@ -1,0 +1,10 @@
+{{template "base.html" .}}
+
+{{define "title"}}{{.Title}} — My Blog{{end}}
+
+{{define "content"}}
+<article>
+    <h1>{{.Title}}</h1>
+    <div>{{.HTMLBody}}</div>
+</article>
+{{end}}

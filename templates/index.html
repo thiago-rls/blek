@@ -1,0 +1,15 @@
+{{template "base.html" .}}
+
+{{define "title"}}{{.Config.Title}}{{end}}
+
+{{define "content"}}
+<h1>{{.Config.Title}}</h1>
+<ul>
+    {{range .Posts}}
+    <li>
+        <a href="{{.URL}}">{{.Title}}</a>
+        <time datetime="{{.DateStr}}">{{.DateStr}}</time>
+    </li>
+    {{end}}
+</ul>
+{{end}}
