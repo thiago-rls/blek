@@ -72,10 +72,12 @@ func Build(contentDir, outputDir, templatesDir string, cfg *Config) error {
 		return posts[i].DateStr > posts[j].DateStr
 	})
 
+	// Render the main index page (/)
 	if err := renderIndex(outputDir, tmpl, posts, cfg, sections); err != nil {
 		return fmt.Errorf("building index: %w", err)
 	}
 
+	// Render the posts index page (/posts/)
 	postsIndexDir := filepath.Join(outputDir, "posts")
 	if err := renderIndex(postsIndexDir, tmpl, posts, cfg, sections); err != nil {
 		return fmt.Errorf("building posts index: %w", err)

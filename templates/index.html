@@ -1,11 +1,12 @@
 {{template "base.html" .}}
 
-{{define "title"}}{{.Config.Title}}{{end}}
-
 {{define "content"}}
 <h1>{{.Config.Title}}</h1>
 
+{{if .Config.Description}}
 <p>{{.Config.Description}}</p>
+{{end}}
+
 <ul>
     {{range .Posts}}
     <li>
