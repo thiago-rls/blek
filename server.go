@@ -115,24 +115,49 @@ func (r *responseRecorder) Write(b []byte) (int, error) {
 func watch(dirs []string, onChange func()) {
 	modTimes := map[string]time.Time{}
 
+	// Initial population to avoid triggering a build on the very first tick
+	for _, dir := range dirs {
+		filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
+			if err == nil && !info.IsDir() {
+				modTimes[path] = info.ModTime()
+			}
+			return nil
+		})
+	}
+
 	for {
 		time.Sleep(500 * time.Millisecond)
 
 		changed := false
+		currentFiles := map[string]bool{}
+
 		for _, dir := range dirs {
 			filepath.Walk(dir, func(path string, info os.FileInfo, err error) error {
 				if err != nil || info.IsDir() {
 					return nil
 				}
+				currentFiles[path] = true
+
 				prev, ok := modTimes[path]
-				if !ok || info.ModTime().After(prev) {
+				if !ok {
+					// New file created
 					modTimes[path] = info.ModTime()
-					if ok {
-						changed = true
-					}
+					changed = true
+				} else if info.ModTime().After(prev) {
+					// Existing file modified
+					modTimes[path] = info.ModTime()
+					changed = true
 				}
 				return nil
 			})
+		}
+
+		// Check for deletions
+		for path := range modTimes {
+			if !currentFiles[path] {
+				delete(modTimes, path)
+				changed = true
+			}
 		}
 
 		if changed {
