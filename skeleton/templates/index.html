@@ -1,11 +1,18 @@
 {{template "base.html" .}}
+
 {{define "content"}}
 <h1>{{.Config.Title}}</h1>
+
+{{if .Config.Description}}
 <p>{{.Config.Description}}</p>
-<h2>Posts</h2>
+{{end}}
+
 <ul>
     {{range .Posts}}
-    <li><a href="{{.URL}}">{{.Title}}</a> - {{.Date.Format "2006-01-02"}}</li>
+    <li>
+        <a href="{{.URL}}">{{.Title}}</a>
+        <time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>
+    </li>
     {{end}}
 </ul>
 {{end}}

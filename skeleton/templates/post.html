@@ -1,10 +1,9 @@
 {{template "base.html" .}}
-{{define "title"}}{{.Title}} - {{.Config.Title}}{{end}}
+
 {{define "content"}}
 <article>
     <h1>{{.Title}}</h1>
-    <p><time>{{.Date.Format "2006-01-02"}}</time></p>
-    <hr>
+    <time datetime="{{.Date.Format "2006-01-02"}}">{{.Date.Format "January 2, 2006"}}</time>
     <div>{{.HTMLBody}}</div>
 </article>
 {{end}}
