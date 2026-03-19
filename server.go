@@ -2,7 +2,6 @@ package main
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"os"
 	"path/filepath"
@@ -139,11 +138,5 @@ func watch(dirs []string, onChange func()) {
 		if changed {
 			onChange()
 		}
-	}
-}
-
-func startServer(cfg *Config) {
-	if err := Serve(cfg, "content", "output", "templates", "static"); err != nil {
-		log.Fatalf("server error: %v\n", err)
 	}
 }

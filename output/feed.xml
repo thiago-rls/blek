@@ -1,20 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
   <channel>
-    <title>~/.thiagorls</title>
-    <link>https://thiagorls.com</link>
-    <description>Hi, I am an electrical engineer, passionate about hardware, software, coffee and solving problems I don’t need to solve.</description>
+    <title>Site title</title>
+    <link>https://blog.com</link>
+    <description>Site description</description>
     <item>
-      <title>Nice</title>
-      <link>https://thiagorls.com/posts/nice/</link>
-      <description>Nice</description>
-      <pubDate>Sun, 03 Mar 2024 00:00:00 +0000</pubDate>
-    </item>
-    <item>
-      <title>Hello World</title>
-      <link>https://thiagorls.com/posts/hello-world/</link>
-      <description>Hello World</description>
-      <pubDate>Fri, 01 Mar 2024 00:00:00 +0000</pubDate>
+      <title>first-post</title>
+      <link>https://blog.com/posts/first-post/</link>
+      <description>first-post</description>
+      <pubDate>Wed, 18 Mar 2026 00:00:00 +0000</pubDate>
     </item>
   </channel>
 </rss>
