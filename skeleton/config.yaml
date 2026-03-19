@@ -1,0 +1,4 @@
+title: "My New Blek Site"
+description: "A simple static site generated with blek."
+base_url: "http://localhost:3000"
+author: "Author Name"

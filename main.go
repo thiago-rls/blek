@@ -19,6 +19,8 @@ func main() {
 	command := os.Args[1]
 
 	switch command {
+	case "init":
+		handleInit(os.Args[2:])
 	case "build":
 		handleBuild()
 	case "serve":
@@ -26,8 +28,8 @@ func main() {
 	case "clean":
 		handleClean()
 	case "new":
-		handleNew(os.Args[2:])
 	case "version":
+		handleNew(os.Args[2:])
 		fmt.Printf("blek v%s\n", Version)
 	case "help":
 		printHelp()
@@ -138,6 +140,7 @@ func printHelp() {
 	fmt.Println("  serve      Build and start a local development server with auto-reload")
 	fmt.Println("  clean      Remove the output directory")
 	fmt.Println("  new        Create a new post or page")
+	fmt.Println("  init       Initialize a new blek project in the current or specified directory")
 	fmt.Println("  version    Show version information")
 	fmt.Println("  help       Show this help message")
 	fmt.Println("\nExample:")

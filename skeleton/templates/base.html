@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}{{.Config.Title}}{{end}}</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="/">Home</a>
+            {{range .Sections}}
+            <a href="/{{.Name}}/">{{.Title}}</a>
+            {{end}}
+        </nav>
+    </header>
+    <main>
+        {{block "content" .}}{{end}}
+    </main>
+    <footer>
+        <p>&copy; 2026 {{.Config.Author}}</p>
+    </footer>
+</body>
+</html>
