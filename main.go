@@ -41,6 +41,10 @@ func main() {
 }
 
 func handleBuild() {
+	if _, err := os.Stat("config.yaml"); os.IsNotExist(err) {
+		fmt.Println("Warning: config.yaml not found, using defaults.")
+	}
+
 	cfg, err := LoadConfig("config.yaml")
 	if err != nil {
 		fmt.Printf("Error loading config: %v\n", err)
@@ -56,6 +60,10 @@ func handleBuild() {
 }
 
 func handleServe() {
+	if _, err := os.Stat("config.yaml"); os.IsNotExist(err) {
+		fmt.Println("Warning: config.yaml not found, using defaults.")
+	}
+
 	cfg, err := LoadConfig("config.yaml")
 	if err != nil {
 		fmt.Printf("Error loading config: %v\n", err)

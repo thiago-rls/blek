@@ -15,15 +15,24 @@ type Config struct {
 }
 
 func LoadConfig(path string) (*Config, error) {
+	cfg := &Config{
+		Title:       "My Blek Site",
+		Description: "A simple static site built with Blek",
+		BaseURL:     "http://localhost:8080",
+		Author:      "Anonymous",
+	}
+
 	data, err := os.ReadFile(path)
 	if err != nil {
+		if os.IsNotExist(err) {
+			return cfg, nil
+		}
 		return nil, fmt.Errorf("reading config: %w", err)
 	}
 
-	var cfg Config
-	if err := yaml.Unmarshal(data, &cfg); err != nil {
+	if err := yaml.Unmarshal(data, cfg); err != nil {
 		return nil, fmt.Errorf("parsing config: %w", err)
 	}
 
-	return &cfg, nil
+	return cfg, nil
 }
