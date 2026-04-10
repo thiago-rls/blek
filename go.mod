@@ -1,4 +1,4 @@
-module github.com/thiago-rls/blek
+module git.thrls.net/thiagorls/blek
 
 go 1.25.4
 

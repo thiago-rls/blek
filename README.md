@@ -15,7 +15,7 @@ It does what I need, nothing more.
 
 ## Installation
 ```bash
-go install github.com/thiago-rls/blek@latest
+go install git.thrls.net/thiagorls/blek@latest
 ```
 
 If `blek` isn't found after installation, your Go bin directory probably isn't in your `PATH`:
